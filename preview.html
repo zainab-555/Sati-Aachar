@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en" class="notranslate" translate="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google" content="notranslate" />
+  <title>Sati Aachar | शुद्ध व पारंपरिक घर का बना अचार</title>
+  <meta name="description" content="सती अचार - 100% शुद्ध सरसों तेल और ताज़ा खड़े मसालों से बना असली देसी अचार। टेस्ट किया क्या?">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              800: '#1b4332',
+              900: '#102e22',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body { background-color: #fdfbf7; color: #1e293b; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useMemo, useEffect } = React;
+
+    const PRODUCTS_DATA = [
+      {
+        id: "aam-ka-aachar",
+        title: "Sati Home Made आम का अचार",
+        englishTitle: "Authentic Mango Pickle",
+        category: "mango",
+        badge: "Bestseller #1",
+        rating: 4.9,
+        reviewsCount: 684,
+        image: "images/3.jpeg",
+        spiceLevel: 3,
+        tasteProfile: "चटपटा, तीखा और पारंपरिक सरसों तेल का शुद्ध स्वाद",
+        description: "पारंपरिक विधि से तैयार देसी आम का तीखा अचार। शुद्ध कच्ची घानी सरसों का तेल, मेथी, सौंफ, कलौंजी और खास मसालों का अनोखा संगम।",
+        ingredients: "देसी कच्चा आम, शुद्ध सरसों तेल, मेथी, सौंफ, कलौंजी, राई, हल्दी, कश्मीरी लाल मिर्च, सेंधा नमक और हींग।",
+        shelfLife: "12 महीने",
+        variants: [
+          { weight: "250g", price: 120, originalPrice: 150, discount: "20% OFF" },
+          { weight: "500g", price: 230, originalPrice: 280, discount: "18% OFF" },
+          { weight: "1kg", price: 440, originalPrice: 550, discount: "20% OFF" }
+        ],
+        tagline: "स्वाद नानी के हाथों का"
+      },
+      {
+        id: "lal-mirch-bharwa",
+        title: "Sati Home Made लाल मिर्च का भरवा अचार",
+        englishTitle: "Stuffed Red Chilli Pickle",
+        category: "chili",
+        badge: "Most Popular",
+        rating: 4.9,
+        reviewsCount: 520,
+        image: "images/4.jpeg",
+        spiceLevel: 4,
+        tasteProfile: "तीखा, खट्टा, बनारसी भरवा मसाले की सुगंध",
+        description: "मोटी ताज़ा लाल मिर्च में भुना हुआ अमचूर, राई, अजवाइन और पारंपरिक मसालों को हाथों से भरकर धूप में पकाया गया स्वादिष्ट अचार।",
+        ingredients: "चयनित मोटी लाल मिर्च, सरसों तेल, अमचूर पाउडर, पीली राई, अजवाइन, जीरा, काला नमक और हींग।",
+        shelfLife: "12 महीने",
+        variants: [
+          { weight: "250g", price: 140, originalPrice: 175, discount: "20% OFF" },
+          { weight: "500g", price: 270, originalPrice: 330, discount: "18% OFF" },
+          { weight: "1kg", price: 520, originalPrice: 650, discount: "20% OFF" }
+        ],
+        tagline: "पराठे और दाल-चावल का असली साथी"
+      },
+      {
+        id: "lahsun-ka-aachar",
+        title: "Sati Home Made लहसुन का अचार",
+        englishTitle: "Pure Garlic Pickle",
+        category: "garlic",
+        badge: "टेस्ट किया क्या?",
+        rating: 4.8,
+        reviewsCount: 412,
+        image: "images/8jpeg.jpeg",
+        spiceLevel: 3,
+        tasteProfile: "पाचक, चटपटा और इम्युनिटी वर्धक हींग-लहसुन स्वाद",
+        description: "देसी छिला हुआ लहसुन, हींग और खड़े मसालों से भरपूर पाचक अचार। गैस और पाचन के लिए अत्यंत लाभकारी और खाने में लाजवाब।",
+        ingredients: "देसी लहसुन कलियां, शुद्ध सरसों तेल, हींग, मेथी दाना, पीली सरसों, हल्दी, मिर्च और सेंधा नमक।",
+        shelfLife: "12 महीने",
+        variants: [
+          { weight: "250g", price: 150, originalPrice: 190, discount: "21% OFF" },
+          { weight: "500g", price: 290, originalPrice: 360, discount: "19% OFF" },
+          { weight: "1kg", price: 560, originalPrice: 700, discount: "20% OFF" }
+        ],
+        tagline: "टेस्ट किया क्या?"
+      },
+      {
+        id: "mishrit-aachar",
+        title: "Sati Home Made मिश्रित अचार",
+        englishTitle: "Mix Vegetable Pickle",
+        category: "mix",
+        badge: "Family Pack",
+        rating: 4.8,
+        reviewsCount: 389,
+        image: "images/2.jpeg",
+        spiceLevel: 3,
+        tasteProfile: "खट्टा-मीठा, कुरकुरा और मसालेदार पंचरंगी स्वाद",
+        description: "आम, नींबू, गाजर, गोभी और हरी मिर्च का संतुलित कुरकुरा मिश्रण। हर निवाले में अलग ताजगी और घर जैसा शुद्ध स्वाद।",
+        ingredients: "आम, गाजर, गोभी, हरी मिर्च, नींबू, सरसों तेल, राई, मेथी, कलौंजी, नमक और मसाले।",
+        shelfLife: "10 महीने",
+        variants: [
+          { weight: "250g", price: 120, originalPrice: 150, discount: "20% OFF" },
+          { weight: "500g", price: 230, originalPrice: 280, discount: "18% OFF" },
+          { weight: "1kg", price: 430, originalPrice: 530, discount: "19% OFF" }
+        ],
+        tagline: "सबका पसंदीदा फैमिली अचार"
+      },
+      {
+        id: "ankurit-methi",
+        title: "Sati Home Made अंकुरित मेथी का अचार",
+        englishTitle: "Sprouted Fenugreek Pickle",
+        category: "healthy",
+        badge: "Health Special",
+        rating: 4.9,
+        reviewsCount: 345,
+        image: "images/5.jpeg",
+        spiceLevel: 2,
+        tasteProfile: "पाचक, हल्का कड़वा-मीठा, अत्यंत स्वास्थ्यवर्धक",
+        description: "ताज़ा अंकुरित मेथी दानों से बना आयुर्वेदिक गुणों वाला अनोखा अचार। जोड़ों के दर्द, डायबिटीज और पेट के स्वास्थ्य के लिए रामबाण।",
+        ingredients: "अंकुरित मेथी, सरसों तेल, सौंफ, अमचूर, कलौंजी, काला नमक, हल्दी और हींग।",
+        shelfLife: "9 महीने",
+        variants: [
+          { weight: "250g", price: 160, originalPrice: 200, discount: "20% OFF" },
+          { weight: "500g", price: 310, originalPrice: 380, discount: "18% OFF" },
+          { weight: "1kg", price: 590, originalPrice: 720, discount: "18% OFF" }
+        ],
+        tagline: "स्वास्थ्य और स्वाद का अनोखा मेल"
+      },
+      {
+        id: "apple-cider-vinegar",
+        title: "Sati Apple Cider Natural Vinegar",
+        englishTitle: "Natural Apple Cider Vinegar (सिरका)",
+        category: "vinegar",
+        badge: "100% Pure Natural",
+        rating: 4.9,
+        reviewsCount: 298,
+        image: "images/1.jpeg",
+        spiceLevel: 1,
+        tasteProfile: "शुद्ध प्राकृतिक सेब का सिरका, वजन घटाने और पाचन में सहायक",
+        description: "कच्चे हिमालयी सेबों से प्राकृतिक रूप से किण्वित बिना किसी रसायन का शुद्ध सिरका। वजन नियंत्रण, डिटॉक्स और चमकती त्वचा के लिए उत्तम।",
+        ingredients: "100% शुद्ध सेब का प्राकृतिक रस (With The Mother), Zero Artificial Preservatives.",
+        shelfLife: "24 महीने",
+        variants: [
+          { weight: "500ml", price: 299, originalPrice: 399, discount: "25% OFF" },
+          { weight: "1 Litre", price: 549, originalPrice: 699, discount: "21% OFF" }
+        ],
+        tagline: "100% नेचुरल विनेगर"
+      }
+    ];
+
+    const CATEGORIES_DATA = [
+      { id: "all", label: "सभी उत्पाद", icon: "✨" },
+      { id: "mango", label: "आम का अचार", icon: "🥭" },
+      { id: "chili", label: "लाल मिर्च भरवा", icon: "🌶️" },
+      { id: "garlic", label: "लहसुन का अचार", icon: "🧄" },
+      { id: "mix", label: "मिश्रित अचार", icon: "🥗" },
+      { id: "healthy", label: "अंकुरित मेथी", icon: "🌱" },
+      { id: "vinegar", label: "नेचुरल सिरका", icon: "🍎" },
+    ];
+
+    function App() {
+      const [cart, setCart] = useState([]);
+      const [searchQuery, setSearchQuery] = useState("");
+      const [selectedCategory, setSelectedCategory] = useState("all");
+      const [selectedWeights, setSelectedWeights] = useState({
+        "aam-ka-aachar": "500g",
+        "lal-mirch-bharwa": "500g",
+        "lahsun-ka-aachar": "500g",
+        "mishrit-aachar": "500g",
+        "ankurit-methi": "500g",
+        "apple-cider-vinegar": "500ml",
+      });
+      const [isCartOpen, setIsCartOpen] = useState(false);
+      const [toast, setToast] = useState(null);
+
+      const showToast = (msg) => {
+        setToast(msg);
+        setTimeout(() => setToast(null), 3000);
+      };
+
+      const addToCart = (product) => {
+        const weight = selectedWeights[product.id] || product.variants[0].weight;
+        const variant = product.variants.find((v) => v.weight === weight) || product.variants[0];
+        const key = `${product.id}-${weight}`;
+
+        setCart((prev) => {
+          const exists = prev.find((i) => i.key === key);
+          if (exists) {
+            return prev.map((i) => i.key === key ? { ...i, quantity: i.quantity + 1 } : i);
+          }
+          return [...prev, { key, productId: product.id, title: product.title, weight, price: variant.price, image: product.image, quantity: 1 }];
+        });
+        showToast(`${product.title} (${weight}) basket me add ho gaya!`);
+      };
+
+      const updateQty = (key, delta) => {
+        setCart((prev) => prev.map((i) => i.key === key ? { ...i, quantity: i.quantity + delta } : i).filter((i) => i.quantity > 0));
+      };
+
+      const cartCount = cart.reduce((s, i) => s + i.quantity, 0);
+      const cartTotal = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+
+      const filtered = PRODUCTS_DATA.filter((p) => {
+        const matchesCat = selectedCategory === "all" || p.category === selectedCategory;
+        const q = searchQuery.toLowerCase().trim();
+        const matchesSearch = !q || p.title.toLowerCase().includes(q) || p.englishTitle.toLowerCase().includes(q);
+        return matchesCat && matchesSearch;
+      });
+
+      return (
+        <div className="min-h-screen flex flex-col bg-[#fdfbf7]">
+          {toast && (
+            <div className="fixed bottom-6 right-6 z-50 bg-emerald-950 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center space-x-2 border border-emerald-800">
+              <span>🌿</span>
+              <span className="font-semibold text-xs">{toast}</span>
+            </div>
+          )}
+
+          {/* Top Banner */}
+          <div className="bg-emerald-950 text-amber-200 text-xs py-2 px-4 text-center font-medium">
+            ✨ 100% शुद्ध घर का बना अचार • कूपन कोड <span className="bg-amber-400 text-emerald-950 font-bold px-1.5 py-0.5 rounded">SATI10</span> लगाएं 10% छूट के लिए • मुफ़्त डिलीवरी
+          </div>
+
+          {/* Header */}
+          <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-stone-200 shadow-sm">
+            <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between gap-4">
+              <div className="flex items-center space-x-3 notranslate" translate="no">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-900 text-white flex items-center justify-center font-serif text-2xl font-bold shadow-md overflow-hidden notranslate" translate="no">
+                  सा
+                </div>
+                <div className="notranslate" translate="no">
+                  <span className="text-2xl font-serif font-extrabold text-emerald-950">Sati <span className="text-amber-600">Aachar</span></span>
+                  <p className="text-[10px] text-stone-500 font-bold uppercase tracking-wider">स्वाद नानी के हाथों का • Est. 1984</p>
+                </div>
+              </div>
+
+              <div className="flex-1 max-w-md hidden md:block">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="खोजें: आम का अचार, मिर्च, लहसुन..."
+                  className="w-full px-4 py-2 bg-stone-100 rounded-full text-xs border border-stone-200 outline-none focus:border-emerald-800"
+                />
+              </div>
+
+              <button
+                onClick={() => setIsCartOpen(!isCartOpen)}
+                className="bg-emerald-950 text-white px-4 py-2.5 rounded-full text-xs font-bold flex items-center space-x-2 shadow hover:bg-black"
+              >
+                <span>🛒 My Basket ({cartCount})</span>
+                <span>• ₹{cartTotal}</span>
+              </button>
+            </div>
+          </header>
+
+          {/* Hero Section */}
+          <section className="max-w-7xl mx-auto px-4 py-8">
+            <div className="bg-gradient-to-r from-emerald-950 to-amber-950 text-white rounded-3xl p-8 sm:p-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center shadow-xl">
+              <div className="space-y-4">
+                <span className="text-amber-400 text-xs font-bold uppercase tracking-widest bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/30">
+                  असली देसी स्वाद • 100% शुद्ध सरसों तेल
+                </span>
+                <h1 className="text-3xl sm:text-5xl font-serif font-bold leading-tight text-amber-50">
+                  दादी-नानी के नुस्खों से बना घर का स्वादिष्ट अचार
+                </h1>
+                <p className="text-stone-300 text-xs sm:text-sm">
+                  पारंपरिक मर्तबानों में धूप से तैयार, बिना किसी हानिकारक केमिकल या विनेगर के।
+                </p>
+                <div className="pt-2">
+                  <a href="#flavors" className="bg-amber-400 text-emerald-950 font-bold px-6 py-3 rounded-full text-xs shadow-lg inline-block hover:bg-amber-500">
+                    अचार खरीदें (Shop Now) →
+                  </a>
+                </div>
+              </div>
+              <div className="flex justify-center">
+                <div className="bg-white/10 p-6 rounded-3xl border border-white/20 backdrop-blur-md max-w-xs text-center">
+                  <img src="images/8jpeg.jpeg" alt="Sati Garlic Pickle" className="h-64 object-contain mx-auto filter drop-shadow-xl" />
+                  <p className="font-serif font-bold text-amber-300 text-sm mt-3">"टेस्ट किया क्या?"</p>
+                  <p className="text-[11px] text-stone-300">लहसुन का पाचक हींग अचार</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Categories */}
+          <section className="max-w-7xl mx-auto px-4 py-6">
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+              {CATEGORIES_DATA.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`p-3 rounded-2xl border text-center transition-all ${
+                    selectedCategory === cat.id
+                      ? "bg-emerald-950 text-white border-emerald-950 shadow scale-105"
+                      : "bg-white text-stone-800 border-stone-200 hover:border-emerald-800"
+                  }`}
+                >
+                  <div className="text-xl mb-1">{cat.icon}</div>
+                  <div className="text-xs font-bold">{cat.label}</div>
+                </button>
+              ))}
+            </div>
+          </section>
+
+          {/* Product Grid */}
+          <section id="flavors" className="max-w-7xl mx-auto px-4 py-8 flex-1">
+            <h2 className="text-2xl font-serif font-bold text-stone-900 mb-6">हमारे सर्वश्रेष्ठ उत्पाद (All Flavors)</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filtered.map((product) => {
+                const weight = selectedWeights[product.id] || product.variants[0].weight;
+                const variant = product.variants.find((v) => v.weight === weight) || product.variants[0];
+                const inCart = cart.find((i) => i.key === `${product.id}-${weight}`);
+
+                return (
+                  <div key={product.id} className="bg-white rounded-3xl border border-stone-200/90 overflow-hidden shadow-sm hover:shadow-xl transition-all p-5 flex flex-col justify-between">
+                    <div>
+                      <div className="relative aspect-square w-full bg-stone-50 rounded-2xl overflow-hidden flex items-center justify-center p-4 mb-4">
+                        <img src={product.image} alt={product.title} className="max-h-full max-w-full object-contain hover:scale-105 transition-transform" />
+                        <span className="absolute top-3 left-3 bg-amber-400 text-stone-950 font-black text-[10px] px-2.5 py-1 rounded-full shadow">
+                          {product.badge}
+                        </span>
+                        <span className="absolute bottom-3 left-3 bg-red-600 text-white font-black text-[10px] px-2 py-0.5 rounded">
+                          {variant.discount}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center space-x-1 text-amber-500 text-xs font-bold mb-1">
+                        <span>⭐ {product.rating}</span>
+                        <span className="text-stone-400 font-normal">({product.reviewsCount})</span>
+                      </div>
+                      <h3 className="font-serif font-bold text-lg text-stone-900 leading-snug">{product.title}</h3>
+                      <p className="text-xs text-stone-500 mt-1 line-clamp-2">{product.description}</p>
+                    </div>
+
+                    <div className="mt-4 pt-3 border-t border-stone-100">
+                      <div className="grid grid-cols-3 gap-1.5 mb-3">
+                        {product.variants.map((v) => (
+                          <button
+                            key={v.weight}
+                            onClick={() => setSelectedWeights({ ...selectedWeights, [product.id]: v.weight })}
+                            className={`py-1 text-xs font-bold rounded-xl border ${
+                              weight === v.weight ? "bg-emerald-950 text-white border-emerald-950" : "bg-stone-50 text-stone-600 border-stone-200"
+                            }`}
+                          >
+                            {v.weight}
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="text-xl font-black text-stone-900">₹{variant.price}</span>
+                          <span className="text-xs text-stone-400 line-through ml-1.5">₹{variant.originalPrice}</span>
+                        </div>
+
+                        {inCart ? (
+                          <div className="flex items-center space-x-2 bg-emerald-950 text-white rounded-full px-2.5 py-1 text-xs font-bold">
+                            <button onClick={() => updateQty(inCart.key, -1)} className="px-1">-</button>
+                            <span>{inCart.quantity}</span>
+                            <button onClick={() => updateQty(inCart.key, 1)} className="px-1">+</button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => addToCart(product)}
+                            className="bg-emerald-950 text-white text-xs font-bold px-4 py-2 rounded-full hover:bg-black shadow"
+                          >
+                            Add to Cart
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* Cart Drawer */}
+          {isCartOpen && (
+            <div className="fixed inset-0 z-50 bg-black/60 flex justify-end">
+              <div className="bg-white w-full max-w-md h-full p-6 flex flex-col justify-between shadow-2xl">
+                <div>
+                  <div className="flex justify-between items-center pb-4 border-b">
+                    <h3 className="font-serif font-bold text-lg">Aapka Basket ({cartCount})</h3>
+                    <button onClick={() => setIsCartOpen(false)} className="text-stone-500 font-bold">✕ Close</button>
+                  </div>
+                  <div className="py-4 space-y-3 max-h-[60vh] overflow-y-auto">
+                    {cart.map((item) => (
+                      <div key={item.key} className="flex items-center space-x-3 p-2 bg-stone-50 rounded-xl border">
+                        <img src={item.image} alt={item.title} className="w-12 h-12 object-contain bg-white rounded p-1" />
+                        <div className="flex-1 min-w-0">
+                          <p className="font-bold text-xs truncate">{item.title}</p>
+                          <p className="text-[10px] text-stone-500">{item.weight} • ₹{item.price}</p>
+                        </div>
+                        <div className="flex items-center space-x-1 font-bold text-xs">
+                          <button onClick={() => updateQty(item.key, -1)} className="px-1.5 bg-stone-200 rounded">-</button>
+                          <span>{item.quantity}</span>
+                          <button onClick={() => updateQty(item.key, 1)} className="px-1.5 bg-stone-200 rounded">+</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t space-y-3">
+                  <div className="flex justify-between font-bold text-base">
+                    <span>कुल योग (Total):</span>
+                    <span>₹{cartTotal}</span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      alert("धन्यवाद! आपका सती अचार ऑर्डर कन्फर्म हो गया है!");
+                      setCart([]);
+                      setIsCartOpen(false);
+                    }}
+                    className="w-full bg-emerald-950 text-white font-bold py-3 rounded-full text-sm hover:bg-black"
+                  >
+                    Proceed to Checkout
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <footer className="bg-stone-900 text-stone-400 py-8 text-center text-xs">
+            <p className="text-white font-bold mb-1">Sati Aachar • Home Made & Pure Pickles</p>
+            <p>© 2026 Sati Aachar. All rights reserved. "टेस्ट किया क्या?"</p>
+          </footer>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
