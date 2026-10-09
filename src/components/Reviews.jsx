@@ -1,31 +1,43 @@
 import React from 'react';
 import { Icon } from './Icons';
 
-export default function Reviews() {
+export default function Reviews({ lang, t }) {
   const reviews = [
     {
       id: 1,
-      name: "पूजा अग्रवाल",
-      city: "दिल्ली",
-      text: "सती का आम का अचार बिल्कुल मेरी दादी के हाथ के अचार जैसा लगा। बाज़ार के सिरके वाले अचारों से हजार गुना बेहतर और शुद्ध सरसों तेल की सौंधी खुशबू!",
+      nameHi: "पूजा अग्रवाल",
+      nameEn: "Pooja Agarwal",
+      cityHi: "नई दिल्ली",
+      cityEn: "New Delhi",
+      textHi: "सती का आम का अचार बिल्कुल मेरी दादी के हाथ के अचार जैसा लगा। बाज़ार के सिरके वाले अचारों से हजार गुना बेहतर और शुद्ध सरसों तेल की सौंधी खुशबू!",
+      textEn: "Sati's mango pickle tastes exactly like my Nani's homemade recipe. Millions times better than commercial pickles with synthetic vinegar!",
       rating: 5,
-      product: "आम का अचार"
+      productHi: "आम का अचार",
+      productEn: "Mango Pickle"
     },
     {
       id: 2,
-      name: "विकास सिंह",
-      city: "लखनऊ",
-      text: "बनारसी भरवा लाल मिर्च का अचार खाकर मज़ा आ गया! मसालेदार और तीखापन एकदम सटीक है। पराठे के साथ रोज़ खा रहे हैं।",
+      nameHi: "विकास सिंह",
+      nameEn: "Vikas Singh",
+      cityHi: "लखनऊ",
+      cityEn: "Lucknow",
+      textHi: "बनारसी भरवा लाल मिर्च का अचार खाकर मज़ा आ गया! मसालेदार और तीखापन एकदम सटीक है। पराठे के साथ रोज़ खा रहे हैं।",
+      textEn: "The Banarasi stuffed red chili pickle is unbelievable! The spice blend with amchur is so addictive with parathas and dal chawal.",
       rating: 5,
-      product: "लाल मिर्च का भरवा अचार"
+      productHi: "लाल मिर्च भरवा",
+      productEn: "Stuffed Red Chilli"
     },
     {
       id: 3,
-      name: "अनिल शर्मा",
-      city: "जयपुर",
-      text: "लहसुन का अचार पेट और गैस की समस्या के लिए कमाल की चीज़ है। बहुत स्वादिष्ट और असरदार। टेस्ट किया क्या? सच में नंबर 1 है!",
+      nameHi: "डॉ. अनिल शर्मा",
+      nameEn: "Dr. Anil Sharma",
+      cityHi: "जयपुर",
+      cityEn: "Jaipur",
+      textHi: "लहसुन और मेथी का अचार पेट और पाचन के लिए कमाल की चीज़ है। बहुत स्वादिष्ट और असरदार। 'टेस्ट किया क्या?' सच में लाजवाब!",
+      textEn: "The garlic and sprouted methi pickles are fantastic for digestion and gut health. Truly authentic and preservative-free!",
       rating: 5,
-      product: "लहसुन का अचार"
+      productHi: "लहसुन का अचार",
+      productEn: "Garlic Pickle"
     }
   ];
 
@@ -33,14 +45,11 @@ export default function Reviews() {
     <section id="reviews" className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center mb-10 space-y-2">
         <span className="text-xs font-bold uppercase tracking-widest text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-          ग्राहक अनुभव
+          {t.reviewsHeading}
         </span>
         <h2 className="font-serif text-2xl sm:text-3xl font-extrabold text-stone-900">
-          सती अचार के दीवानों की राय
+          {t.reviewsSub}
         </h2>
-        <p className="text-stone-500 text-xs sm:text-sm">
-          हज़ारों घरों में रोज़ की थाली का अभिन्न हिस्सा
-        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -53,13 +62,17 @@ export default function Reviews() {
                 ))}
               </div>
               <p className="text-stone-700 text-xs sm:text-sm leading-relaxed">
-                "{r.text}"
+                "{lang === 'hi' ? r.textHi : r.textEn}"
               </p>
             </div>
             <div className="pt-3 border-t border-stone-100 flex items-center justify-between text-xs">
               <div>
-                <span className="font-bold text-stone-900 block">{r.name}</span>
-                <span className="text-stone-400 text-[11px]">{r.city} • {r.product}</span>
+                <span className="font-bold text-stone-900 block">
+                  {lang === 'hi' ? r.nameHi : r.nameEn}
+                </span>
+                <span className="text-stone-400 text-[11px]">
+                  {lang === 'hi' ? `${r.cityHi} • ${r.productHi}` : `${r.cityEn} • ${r.productEn}`}
+                </span>
               </div>
               <span className="text-emerald-700 font-bold text-[10px] bg-emerald-50 px-2 py-0.5 rounded-full">
                 ✓ Verified

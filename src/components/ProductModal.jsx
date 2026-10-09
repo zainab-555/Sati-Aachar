@@ -6,12 +6,21 @@ export default function ProductModal({
   onClose,
   selectedWeight,
   onWeightChange,
-  onAddToCart
+  onAddToCart,
+  lang,
+  t
 }) {
   if (!product) return null;
 
   const currentVariant =
     product.variants.find((v) => v.weight === selectedWeight) || product.variants[0];
+
+  const title = lang === 'hi' ? product.title : product.titleEn;
+  const description = lang === 'hi' ? product.description : product.descriptionEn;
+  const tasteProfile = lang === 'hi' ? product.tasteProfile : product.tasteProfileEn;
+  const ingredients = lang === 'hi' ? product.ingredients : product.ingredientsEn;
+  const shelfLife = lang === 'hi' ? product.shelfLife : product.shelfLifeEn;
+  const badge = lang === 'hi' ? product.badge : product.badgeEn;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
@@ -29,12 +38,14 @@ export default function ProductModal({
         <div className="md:w-1/2 relative bg-stone-50 flex items-center justify-center p-6">
           <img
             src={product.image}
-            alt={product.title}
+            alt={title}
             className="w-full h-full object-contain max-h-[380px]"
           />
-          <div className="absolute top-4 left-4 bg-amber-400 text-stone-900 font-extrabold text-xs px-3 py-1 rounded-full shadow">
-            {product.badge || "Sati Special"}
-          </div>
+          {badge && (
+            <div className="absolute top-4 left-4 bg-amber-400 text-stone-900 font-extrabold text-xs px-3 py-1 rounded-full shadow">
+              {badge}
+            </div>
+          )}
         </div>
 
         {/* Right Details */}
@@ -43,42 +54,39 @@ export default function ProductModal({
             <div className="flex items-center space-x-2 text-xs font-bold text-amber-600 mb-1">
               <span>⭐ {product.rating} Rating</span>
               <span>•</span>
-              <span>{product.reviewsCount} समीक्षाएं</span>
+              <span>{product.reviewsCount} {t.reviewsCount}</span>
             </div>
 
             <h3 className="font-serif text-2xl font-bold text-stone-900 leading-snug">
-              {product.title}
+              {title}
             </h3>
-            <p className="text-xs text-stone-500 font-medium">
-              {product.englishTitle}
-            </p>
 
             <div className="mt-3 p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs space-y-1">
-              <p className="font-bold text-amber-900">स्वाद और विशेषता (Taste Profile):</p>
-              <p className="text-amber-800">{product.tasteProfile}</p>
+              <p className="font-bold text-amber-900">{t.tasteProfileLabel}</p>
+              <p className="text-amber-800">{tasteProfile}</p>
             </div>
 
             <p className="text-xs text-stone-600 mt-3 leading-relaxed">
-              {product.description}
+              {description}
             </p>
 
             {/* Ingredients */}
             <div className="mt-4 pt-4 border-t border-stone-100 text-xs space-y-1">
-              <span className="font-bold text-stone-800">शुद्ध सामग्री (Ingredients):</span>
+              <span className="font-bold text-stone-800">{t.ingredientsLabel}</span>
               <p className="text-stone-500 leading-relaxed text-[11px]">
-                {product.ingredients}
+                {ingredients}
               </p>
             </div>
 
             <div className="mt-2 text-[11px] text-stone-500 flex items-center space-x-2">
-              <span className="font-bold text-stone-700">सुरक्षित अवधि (Shelf Life):</span>
-              <span>{product.shelfLife}</span>
+              <span className="font-bold text-stone-700">{t.shelfLifeLabel}</span>
+              <span>{shelfLife}</span>
             </div>
 
             {/* Jar size buttons */}
             <div className="mt-4">
               <span className="block text-xs font-bold text-stone-700 mb-1.5">
-                मात्रा चुनें:
+                {t.selectJarSize}
               </span>
               <div className="grid grid-cols-3 gap-2">
                 {product.variants.map((v) => {
@@ -120,7 +128,7 @@ export default function ProductModal({
               className="bg-emerald-900 hover:bg-emerald-950 text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-full shadow-lg flex items-center space-x-2 transition-all active:scale-95"
             >
               <Icon.Cart className="w-4 h-4" />
-              <span>Basket me daalein</span>
+              <span>{t.addToCart}</span>
             </button>
           </div>
 

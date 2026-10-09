@@ -8,7 +8,9 @@ export default function CartDrawer({
   onUpdateQuantity,
   onRemoveItem,
   subtotal,
-  onOpenCheckout
+  onOpenCheckout,
+  lang,
+  t
 }) {
   const [couponCode, setCouponCode] = useState("");
   const [discountPercent, setDiscountPercent] = useState(0);
@@ -27,9 +29,9 @@ export default function CartDrawer({
     const code = couponCode.trim().toUpperCase();
     if (code === "SATI10") {
       setDiscountPercent(10);
-      setCouponMessage("✓ 'SATI10' applied! 10% discount added!");
+      setCouponMessage(lang === 'hi' ? "✓ 'SATI10' लागू! 10% छूट जोड़ी गई!" : "✓ 'SATI10' applied! 10% discount added!");
     } else {
-      setCouponMessage("Invalid coupon code. Try using 'SATI10'!");
+      setCouponMessage(lang === 'hi' ? "अमान्य कूपन। 'SATI10' का उपयोग करें!" : "Invalid coupon code. Try using 'SATI10'!");
     }
   };
 
@@ -48,7 +50,7 @@ export default function CartDrawer({
             <div className="flex items-center space-x-2">
               <Icon.Cart className="w-5 h-5 text-emerald-950" />
               <h3 className="font-serif text-lg font-bold text-stone-900">
-                Aapka Pickle Basket ({cart.reduce((s, i) => s + i.quantity, 0)})
+                {t.cart.title} ({cart.reduce((s, i) => s + i.quantity, 0)})
               </h3>
             </div>
             <button
@@ -64,7 +66,7 @@ export default function CartDrawer({
             {amountNeeded > 0 ? (
               <div>
                 <div className="flex justify-between font-bold text-amber-900 mb-1">
-                  <span>₹{amountNeeded} ka aur add karein FREE delivery ke liye! 🚚</span>
+                  <span>₹{amountNeeded} {t.cart.freeShipNeed}</span>
                   <span>{Math.round(((freeDeliveryThreshold - amountNeeded) / freeDeliveryThreshold) * 100)}%</span>
                 </div>
                 <div className="w-full h-2 bg-amber-200 rounded-full overflow-hidden">
@@ -77,7 +79,7 @@ export default function CartDrawer({
             ) : (
               <div className="flex items-center space-x-1.5 text-emerald-800 font-bold">
                 <Icon.Check className="w-4 h-4 text-emerald-600" />
-                <span>Mubaarak! Aapko mil rahi hai FREE All-India Delivery! 🎉</span>
+                <span>{t.cart.freeShipUnlocked}</span>
               </div>
             )}
           </div>
@@ -87,15 +89,15 @@ export default function CartDrawer({
             {cart.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center space-y-4 p-8">
                 <div className="text-6xl">🫙</div>
-                <h4 className="font-bold text-stone-800 text-lg">Basket Khaali Hai</h4>
-                <p className="text-stone-500 text-xs">
-                  Ghar ke bane shuddh aachar ke bina khana adhura hai. Bestsellers me se choose karein!
+                <h4 className="font-bold text-stone-800 text-lg">{t.cart.emptyTitle}</h4>
+                <p className="text-stone-500 text-xs leading-relaxed">
+                  {t.cart.emptySub}
                 </p>
                 <button
                   onClick={onClose}
                   className="bg-emerald-900 text-white font-bold text-xs px-6 py-3 rounded-full shadow hover:bg-emerald-800"
                 >
-                  Explore Flavors
+                  {t.cart.explore}
                 </button>
               </div>
             ) : (
@@ -165,14 +167,14 @@ export default function CartDrawer({
                   type="text"
                   value={couponCode}
                   onChange={(e) => setCouponCode(e.target.value)}
-                  placeholder="Coupon: SATI10"
+                  placeholder={t.cart.couponPlaceholder}
                   className="flex-1 px-3 py-2 text-xs bg-white border border-stone-300 rounded-xl uppercase font-bold text-stone-800 outline-none"
                 />
                 <button
                   type="submit"
                   className="bg-emerald-950 text-white text-xs font-bold px-4 py-2 rounded-xl hover:bg-black"
                 >
-                  Apply
+                  {t.cart.apply}
                 </button>
               </form>
               {couponMessage && (
@@ -184,23 +186,23 @@ export default function CartDrawer({
               {/* Price Details */}
               <div className="space-y-1.5 text-xs text-stone-600 pt-2 border-t border-stone-200">
                 <div className="flex justify-between">
-                  <span>Subtotal:</span>
+                  <span>{t.cart.subtotal}</span>
                   <span className="font-semibold text-stone-900">₹{subtotal}</span>
                 </div>
                 {discountAmount > 0 && (
                   <div className="flex justify-between text-emerald-700 font-semibold">
-                    <span>Coupon Discount (10%):</span>
+                    <span>{t.cart.couponDiscount}</span>
                     <span>-₹{discountAmount}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <span>Delivery Charges:</span>
+                  <span>{t.cart.deliveryCharges}</span>
                   <span className="font-semibold text-stone-900">
-                    {deliveryFee === 0 ? <span className="text-emerald-700 font-bold">FREE</span> : `₹${deliveryFee}`}
+                    {deliveryFee === 0 ? <span className="text-emerald-700 font-bold">{t.cart.free}</span> : `₹${deliveryFee}`}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm font-black text-stone-900 pt-2 border-t border-stone-200">
-                  <span>Grand Total:</span>
+                  <span>{t.cart.grandTotal}</span>
                   <span className="text-base text-emerald-950">₹{grandTotal}</span>
                 </div>
               </div>
@@ -213,7 +215,7 @@ export default function CartDrawer({
                 }}
                 className="w-full bg-emerald-950 hover:bg-black text-white font-extrabold py-3.5 rounded-full shadow-lg transition-all flex items-center justify-center space-x-2 text-sm"
               >
-                <span>Proceed to Checkout</span>
+                <span>{t.cart.checkoutBtn}</span>
                 <Icon.ArrowRight />
               </button>
 

@@ -10,11 +10,17 @@ export default function ProductCard({
   onUpdateQuantity,
   onOpenModal,
   isWishlisted,
-  onToggleWishlist
+  onToggleWishlist,
+  lang,
+  t
 }) {
   const currentVariant =
     product.variants.find((v) => v.weight === selectedWeight) || product.variants[0];
   const cartKey = `${product.id}-${selectedWeight}`;
+
+  const title = lang === 'hi' ? product.title : product.titleEn;
+  const description = lang === 'hi' ? product.description : product.descriptionEn;
+  const badge = lang === 'hi' ? product.badge : product.badgeEn;
 
   return (
     <div className="bg-white rounded-3xl border border-stone-200/90 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group relative">
@@ -26,19 +32,19 @@ export default function ProductCard({
       >
         <img
           src={product.image}
-          alt={product.title}
+          alt={title}
           className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500"
         />
 
         {/* Top Badges */}
         <div className="absolute top-3 left-3 flex flex-col space-y-1.5 z-10">
-          {product.badge && (
+          {badge && (
             <span className="bg-amber-400 text-stone-900 font-extrabold text-[10px] tracking-wide uppercase px-2.5 py-1 rounded-full shadow">
-              {product.badge}
+              {badge}
             </span>
           )}
           <span className="bg-emerald-900/90 text-white font-medium text-[10px] px-2 py-0.5 rounded-md backdrop-blur-sm">
-            🌶️ तीखा स्तर: {product.spiceLevel}/4
+            🌶️ {t.heatLevel}: {product.spiceLevel}/4
           </span>
         </div>
 
@@ -87,7 +93,7 @@ export default function ProductCard({
               <span>{product.rating}</span>
             </div>
             <span className="text-[11px] text-stone-400 font-medium">
-              ({product.reviewsCount} समीक्षाएं)
+              ({product.reviewsCount} {t.reviewsCount})
             </span>
           </div>
 
@@ -95,21 +101,18 @@ export default function ProductCard({
             onClick={() => onOpenModal(product)}
             className="font-serif text-lg font-bold text-stone-900 group-hover:text-emerald-900 transition-colors cursor-pointer leading-snug"
           >
-            {product.title}
+            {title}
           </h3>
-          <p className="text-[11px] text-stone-500 font-medium mt-0.5">
-            {product.englishTitle}
-          </p>
 
           <p className="text-xs text-stone-500 line-clamp-2 mt-2 leading-relaxed">
-            {product.description}
+            {description}
           </p>
         </div>
 
         {/* Jar Size Selector */}
         <div>
           <span className="block text-[10px] font-bold uppercase tracking-wider text-stone-400 mb-1.5">
-            मात्रा चुनें (Jar Size):
+            {t.selectJarSize}
           </span>
           <div className="grid grid-cols-3 gap-1.5">
             {product.variants.map((v) => {
@@ -143,7 +146,7 @@ export default function ProductCard({
               </span>
             </div>
             <span className="text-[10px] text-emerald-700 font-semibold block">
-              100% शुद्ध व घर का बना
+              {t.pureHomeMade}
             </span>
           </div>
 
@@ -169,7 +172,7 @@ export default function ProductCard({
               className="bg-emerald-900 hover:bg-emerald-950 text-white font-bold text-xs px-4 py-2.5 rounded-full shadow hover:shadow-md transition-all flex items-center space-x-1.5 active:scale-95"
             >
               <Icon.Plus className="w-3.5 h-3.5" />
-              <span>Add to Cart</span>
+              <span>{t.addToCart}</span>
             </button>
           )}
         </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Footer() {
+export default function Footer({ lang, t }) {
   return (
     <footer className="bg-[#121915] text-stone-300 pt-14 pb-20 md:pb-10 border-t border-stone-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -18,16 +18,18 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-xs text-stone-400 leading-relaxed max-w-sm">
-              भारत के पारंपरिक स्वाद और नानी-दादी के नुस्खों को समर्पित। 100% शुद्ध सरसों तेल और ताज़ा खड़े मसालों से बना असली देसी अचार।
+              {t.footer.desc}
             </p>
             <p className="text-xs text-amber-300 font-bold">
-              "टेस्ट किया क्या?"
+              "{t.footer.tagline}"
             </p>
           </div>
 
           {/* Quick links */}
           <div className="space-y-2 text-xs">
-            <h4 className="font-bold text-white uppercase tracking-wider mb-2">लोकप्रिय अचार</h4>
+            <h4 className="font-bold text-white uppercase tracking-wider mb-2">
+              {lang === 'hi' ? 'लोकप्रिय उत्पाद' : 'Popular Pickles'}
+            </h4>
             <p className="text-stone-400">आम का अचार (Mango Pickle)</p>
             <p className="text-stone-400">लाल मिर्च भरवा (Stuffed Chilli)</p>
             <p className="text-stone-400">लहसुन का अचार (Garlic Pickle)</p>
@@ -38,7 +40,9 @@ export default function Footer() {
 
           {/* Contact */}
           <div className="space-y-2 text-xs">
-            <h4 className="font-bold text-white uppercase tracking-wider mb-2">संपर्क व कस्टमर सपोर्ट</h4>
+            <h4 className="font-bold text-white uppercase tracking-wider mb-2">
+              {lang === 'hi' ? 'संपर्क व सपोर्ट' : 'Customer Support'}
+            </h4>
             <p className="text-stone-400">📞 +91 98765 43210</p>
             <p className="text-stone-400">✉️ support@satiaachar.com</p>
             <p className="text-stone-400">🚚 All India Delivery Available</p>
@@ -50,7 +54,7 @@ export default function Footer() {
         </div>
 
         <div className="pt-6 border-t border-stone-800 text-center text-xs text-stone-500">
-          <p>© 2026 Sati Aachar. All rights reserved. शुद्धता और स्वाद का अटूट विश्वास।</p>
+          <p>{t.footer.rights}</p>
         </div>
       </div>
     </footer>

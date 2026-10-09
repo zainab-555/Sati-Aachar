@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Icon } from './Icons';
 
-export default function CheckoutModal({ isOpen, onClose, total, onSuccess }) {
+export default function CheckoutModal({ isOpen, onClose, total, onSuccess, t }) {
   const [formData, setFormData] = useState({
     name: 'Aarav Sharma',
     phone: '+91 9876543210',
@@ -28,14 +28,14 @@ export default function CheckoutModal({ isOpen, onClose, total, onSuccess }) {
         <div className="space-y-1 mb-6">
           <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider">Fast 2-Minute Checkout</span>
           <h3 className="font-serif text-2xl font-extrabold text-stone-900">
-            डिलीवरी पता और भुगतान
+            {t.checkout.heading}
           </h3>
-          <p className="text-xs text-stone-500">कुल भुगतान राशि: <strong className="text-emerald-950 font-black text-sm">₹{total}</strong></p>
+          <p className="text-xs text-stone-500">Total: <strong className="text-emerald-950 font-black text-sm">₹{total}</strong></p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div>
-            <label className="block font-bold text-stone-700 mb-1">पूरा नाम (Full Name)</label>
+            <label className="block font-bold text-stone-700 mb-1">{t.checkout.name}</label>
             <input
               type="text"
               required
@@ -47,7 +47,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onSuccess }) {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-bold text-stone-700 mb-1">मोबाइल नंबर (For OTP)</label>
+              <label className="block font-bold text-stone-700 mb-1">{t.checkout.phone}</label>
               <input
                 type="tel"
                 required
@@ -57,7 +57,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onSuccess }) {
               />
             </div>
             <div>
-              <label className="block font-bold text-stone-700 mb-1">पिनकोड (Pincode)</label>
+              <label className="block font-bold text-stone-700 mb-1">{t.checkout.pincode}</label>
               <input
                 type="text"
                 required
@@ -69,7 +69,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onSuccess }) {
           </div>
 
           <div>
-            <label className="block font-bold text-stone-700 mb-1">घर का पूरा पता (Complete Address)</label>
+            <label className="block font-bold text-stone-700 mb-1">{t.checkout.address}</label>
             <textarea
               rows="2"
               required
@@ -80,7 +80,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onSuccess }) {
           </div>
 
           <div>
-            <label className="block font-bold text-stone-700 mb-2">भुगतान का माध्यम (Payment Option)</label>
+            <label className="block font-bold text-stone-700 mb-2">{t.checkout.paymentMode}</label>
             <div className="space-y-2">
               <label className="flex items-center space-x-3 p-3 bg-stone-50 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-100">
                 <input
@@ -89,7 +89,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onSuccess }) {
                   checked={formData.payment === 'upi'}
                   onChange={() => setFormData({ ...formData, payment: 'upi' })}
                 />
-                <span className="font-bold text-stone-800">⚡ UPI (Google Pay / PhonePe / Paytm)</span>
+                <span className="font-bold text-stone-800">{t.checkout.upi}</span>
               </label>
               <label className="flex items-center space-x-3 p-3 bg-stone-50 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-100">
                 <input
@@ -98,7 +98,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onSuccess }) {
                   checked={formData.payment === 'cod'}
                   onChange={() => setFormData({ ...formData, payment: 'cod' })}
                 />
-                <span className="font-bold text-stone-800">💵 Cash on Delivery (COD)</span>
+                <span className="font-bold text-stone-800">{t.checkout.cod}</span>
               </label>
             </div>
           </div>
@@ -107,7 +107,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onSuccess }) {
             type="submit"
             className="w-full mt-4 bg-emerald-950 hover:bg-black text-white font-extrabold py-3.5 rounded-full shadow-lg transition-all text-sm flex items-center justify-center space-x-2"
           >
-            <span>ऑर्डर कन्फर्म करें (Pay ₹{total})</span>
+            <span>{t.checkout.confirmBtn} (Pay ₹{total})</span>
             <Icon.Check />
           </button>
         </form>

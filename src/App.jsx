@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { PRODUCTS_DATA, CATEGORIES_DATA } from './data/products';
+import { TRANSLATIONS } from './data/translations';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import ProductCard from './components/ProductCard';
@@ -9,8 +10,19 @@ import CheckoutModal from './components/CheckoutModal';
 import WhyChooseUs from './components/WhyChooseUs';
 import Reviews from './components/Reviews';
 import Footer from './components/Footer';
+import LanguageModal from './components/LanguageModal';
 
 export default function App() {
+  // Language State: 'hi' or 'en'
+  const [lang, setLang] = useState(() => {
+    return localStorage.getItem('sati_lang') || 'hi';
+  });
+
+  // Show Language Selector Popup on First Visit
+  const [showLangModal, setShowLangModal] = useState(() => {
+    return !localStorage.getItem('sati_lang_selected');
+  });
+
   const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,7 +34,7 @@ export default function App() {
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
 
-  // Selected weight per product: { [productId]: "500g" }
+  // Selected weights per product
   const [selectedWeights, setSelectedWeights] = useState({
     "aam-ka-aachar": "500g",
     "lal-mirch-bharwa": "500g",
@@ -31,6 +43,24 @@ export default function App() {
     "ankurit-methi": "500g",
     "apple-cider-vinegar": "500ml",
   });
+
+  // Current dictionary
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.hi;
+
+  const handleSelectLanguage = (selectedLang) => {
+    setLang(selectedLang);
+    localStorage.setItem('sati_lang', selectedLang);
+    localStorage.setItem('sati_lang_selected', 'true');
+    setShowLangModal(false);
+    showToast(selectedLang === 'hi' ? "भाषा 'हिन्दी' सेट हो गई! 🇮🇳" : "Language set to 'English'! 🇬🇧");
+  };
+
+  const handleToggleLanguage = () => {
+    const nextLang = lang === 'hi' ? 'en' : 'hi';
+    setLang(nextLang);
+    localStorage.setItem('sati_lang', nextLang);
+    showToast(nextLang === 'hi' ? "भाषा: हिन्दी 🇮🇳" : "Language: English 🇬🇧");
+  };
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -45,6 +75,7 @@ export default function App() {
     const chosenWeight = weight || selectedWeights[product.id] || product.variants[0].weight;
     const variant = product.variants.find((v) => v.weight === chosenWeight) || product.variants[0];
     const cartKey = `${product.id}-${chosenWeight}`;
+    const productTitle = lang === 'hi' ? product.title : product.titleEn;
 
     setCart((prev) => {
       const existing = prev.find((item) => item.key === cartKey);
@@ -58,7 +89,7 @@ export default function App() {
         {
           key: cartKey,
           productId: product.id,
-          title: product.title,
+          title: productTitle,
           weight: chosenWeight,
           price: variant.price,
           originalPrice: variant.originalPrice,
@@ -68,7 +99,7 @@ export default function App() {
       ];
     });
 
-    showToast(`${product.title} (${chosenWeight}) basket me add ho gaya! 🫙`);
+    showToast(`${productTitle} (${chosenWeight}) ${lang === 'hi' ? 'basket me add ho gaya! 🫙' : 'added to basket!'}`);
   };
 
   const handleUpdateQuantity = (key, delta) => {
@@ -92,10 +123,10 @@ export default function App() {
   const handleToggleWishlist = (productId) => {
     setWishlist((prev) => {
       if (prev.includes(productId)) {
-        showToast("Favorites se remove kiya gaya.");
+        showToast(lang === 'hi' ? "Favorites se remove kiya gaya." : "Removed from favorites.");
         return prev.filter((id) => id !== productId);
       } else {
-        showToast("Wishlist me add ho gaya! ❤️");
+        showToast(lang === 'hi' ? "Wishlist me add ho gaya! ❤️" : "Saved to wishlist! ❤️");
         return [...prev, productId];
       }
     });
@@ -119,9 +150,9 @@ export default function App() {
       const matchesSearch =
         !q ||
         p.title.toLowerCase().includes(q) ||
-        p.englishTitle.toLowerCase().includes(q) ||
+        p.titleEn.toLowerCase().includes(q) ||
         p.description.toLowerCase().includes(q) ||
-        p.ingredients.toLowerCase().includes(q);
+        p.descriptionEn.toLowerCase().includes(q);
 
       return matchesCategory && matchesSearch;
     });
@@ -130,7 +161,13 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-[#fdfbf7] selection:bg-emerald-900 selection:text-white">
       
-      {/* Toast */}
+      {/* First Visit Language Selection Modal */}
+      <LanguageModal
+        isOpen={showLangModal}
+        onSelectLanguage={handleSelectLanguage}
+      />
+
+      {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 bg-emerald-950 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center space-x-2 border border-emerald-800">
           <span>🌿</span>
@@ -138,7 +175,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Header */}
+      {/* Header with Language Switcher */}
       <Header
         cartCount={cartCount}
         cartTotal={cartSubtotal}
@@ -146,12 +183,14 @@ export default function App() {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         wishlistCount={wishlist.length}
-        onOpenAuth={() => showToast("Sati Aachar Customer Portal me aapka swaagat hai!")}
+        lang={lang}
+        onToggleLanguage={handleToggleLanguage}
+        t={t}
       />
 
       <main className="flex-1">
         {/* Hero Section */}
-        <Hero />
+        <Hero lang={lang} t={t} />
 
         {/* Categories Section */}
         <section id="categories" className="py-10 bg-white border-b border-stone-200">
@@ -159,23 +198,24 @@ export default function App() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <span className="text-xs font-bold text-amber-700 uppercase tracking-widest bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
-                  श्रेणियां (Categories)
+                  {t.categoriesSub}
                 </span>
                 <h2 className="text-2xl font-serif font-extrabold text-stone-900 mt-1">
-                  घर के बने पारंपरिक अचार
+                  {t.categoriesHeading}
                 </h2>
               </div>
               <button
                 onClick={() => setSelectedCategory("all")}
                 className="text-xs font-bold text-emerald-900 hover:underline"
               >
-                सभी देखें ({PRODUCTS_DATA.length})
+                {t.viewAll} ({PRODUCTS_DATA.length})
               </button>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
               {CATEGORIES_DATA.map((cat) => {
                 const isSelected = selectedCategory === cat.id;
+                const label = lang === 'hi' ? cat.labelHi : cat.labelEn;
                 return (
                   <button
                     key={cat.id}
@@ -191,10 +231,7 @@ export default function App() {
                   >
                     <div className="text-2xl mb-1">{cat.icon}</div>
                     <div className={`text-xs font-bold truncate ${isSelected ? "text-amber-300" : "text-stone-900"}`}>
-                      {cat.label}
-                    </div>
-                    <div className={`text-[10px] truncate ${isSelected ? "text-stone-300" : "text-stone-500"}`}>
-                      {cat.englishLabel}
+                      {label}
                     </div>
                   </button>
                 );
@@ -208,10 +245,10 @@ export default function App() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
               <h2 className="text-2xl sm:text-3xl font-serif font-extrabold text-stone-900">
-                हमारे शुद्ध उत्पाद (Best Sellers)
+                {t.productsHeading}
               </h2>
               <p className="text-xs sm:text-sm text-stone-500 mt-0.5">
-                कच्ची घानी सरसों का तेल • खड़े मसाले • 100% शुद्धता
+                {t.productsSub}
               </p>
             </div>
 
@@ -220,7 +257,7 @@ export default function App() {
                 onClick={() => setSelectedCategory("all")}
                 className="self-start text-xs font-bold bg-stone-200 hover:bg-stone-300 px-3 py-1.5 rounded-full text-stone-700"
               >
-                ✕ Clear Category Filter
+                ✕ Clear Filter
               </button>
             )}
           </div>
@@ -243,6 +280,8 @@ export default function App() {
                   onOpenModal={setActiveModalProduct}
                   isWishlisted={wishlist.includes(product.id)}
                   onToggleWishlist={handleToggleWishlist}
+                  lang={lang}
+                  t={t}
                 />
               );
             })}
@@ -250,14 +289,14 @@ export default function App() {
         </section>
 
         {/* Why Choose Us */}
-        <WhyChooseUs />
+        <WhyChooseUs t={t} />
 
         {/* Customer Reviews */}
-        <Reviews />
+        <Reviews lang={lang} t={t} />
       </main>
 
       {/* Footer */}
-      <Footer />
+      <Footer lang={lang} t={t} />
 
       {/* Cart Drawer */}
       <CartDrawer
@@ -271,6 +310,8 @@ export default function App() {
           setCheckoutTotal(total);
           setIsCheckoutOpen(true);
         }}
+        lang={lang}
+        t={t}
       />
 
       {/* Product Quick-View Modal */}
@@ -281,6 +322,8 @@ export default function App() {
           selectedWeight={selectedWeights[activeModalProduct.id] || activeModalProduct.variants[0].weight}
           onWeightChange={handleWeightChange}
           onAddToCart={handleAddToCart}
+          lang={lang}
+          t={t}
         />
       )}
 
@@ -294,6 +337,7 @@ export default function App() {
           setCart([]);
           setOrderSuccess(true);
         }}
+        t={t}
       />
 
       {/* Order Success Popup */}
@@ -304,21 +348,21 @@ export default function App() {
               ✓
             </div>
             <h3 className="font-serif text-2xl font-extrabold text-stone-900">
-              धन्यवाद! आपका ऑर्डर प्राप्त हो गया! 🎉
+              {t.orderSuccess.title}
             </h3>
             <p className="text-xs text-stone-600 leading-relaxed">
-              सती अचार का शुद्ध बैच तैयार करके सुरक्षित सीलबंद पैकिंग में आपके पते पर रवाना किया जा रहा है।
+              {t.orderSuccess.msg}
             </p>
             <div className="bg-stone-50 p-4 rounded-2xl border border-stone-200 text-xs text-left space-y-1">
-              <p className="font-bold text-stone-800">ऑर्डर आईडी: #SA-2026-9042</p>
-              <p className="text-stone-500">डिलीवरी: 2 से 3 दिन में</p>
-              <p className="text-emerald-700 font-semibold">भुगतान: कन्फर्म</p>
+              <p className="font-bold text-stone-800">Order ID: #SA-2026-9042</p>
+              <p className="text-stone-500">{t.orderSuccess.deliveryTime}</p>
+              <p className="text-emerald-700 font-semibold">Payment: Confirmed</p>
             </div>
             <button
               onClick={() => setOrderSuccess(false)}
               className="w-full bg-emerald-950 text-white font-bold py-3 rounded-full text-xs hover:bg-black"
             >
-              Continue Shopping
+              {t.orderSuccess.continueShopping}
             </button>
           </div>
         </div>
